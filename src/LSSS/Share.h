@@ -166,7 +166,7 @@ public:
      * determines the shared value
      *   - i.e. Partially open the shares
      */
-  public: gfp combine(const vector<Share> &S);
+  gfp combine(const vector<Share> &S);
 
   /* Given a set of shares, one from each player and
     * the global key, determines if the sharing is valid

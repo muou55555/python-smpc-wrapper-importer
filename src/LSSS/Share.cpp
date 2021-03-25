@@ -63,6 +63,7 @@ void Share::assign(const gfp &aa, const vector<gfp> &alphai)
 
 void Share::set_shares(const vector<gfp> &aa)
 {
+  cout << SD.M.shares_per_player(p) << " SHARES PER PLAYER" << endl;
   if (aa.size() != SD.M.shares_per_player(p))
     {
       throw invalid_length();

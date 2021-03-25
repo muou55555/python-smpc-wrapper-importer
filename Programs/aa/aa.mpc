@@ -13,11 +13,7 @@ def output_random_triples(cond):
     v, un1, un2 = sint.get_random_triple()
     u = v * r
     outp = [y, r, w, v, u]
-    print_ln("Imported... %s", y.reveal())
-    print_ln("Imported... %s", r.reveal())
-    print_ln("Imported... %s", w.reveal())
-    print_ln("Imported... %s", v.reveal())
-    print_ln("Imported... %s", u.reveal())
+    print_ln("Exporting ... %s", y.reveal())
     output_shares(2, *outp)
     data[i][cond] = y
   return cond + 1
@@ -40,7 +36,8 @@ def import_data(cond):
   def range_body(i):
     # naming as in Damgard et al
     y = cint.public_input(1000)
-    print_ln("Imported... %s", data[i][cond].reveal())
+    print_ln("Imported... %s", y)
+    print_ln("Demasking... %s", y + data[i][cond].reveal())
     r[0] = r[0] + y + data[i][cond]
   return cond + 1
 

@@ -1,5 +1,7 @@
 #include "Client.h"
 #include "../LSSS/Share.h"
+#include "../LSSS/Share.cpp"
+#include "../LSSS/ShareData.h"
 
 sedp::Client::Client(unsigned int id, unsigned int max_players, string dataset):
   client_id{id}, max_players{max_players}, dataset_file_path{dataset}, dataset_size{0}
@@ -43,7 +45,7 @@ void sedp::Client::init() {
   cout << "Dataset size: " << dataset_size << endl;
 
   // Initialize shares matrix
-  triples.assign(dataset_size, vector<gfp>(5));
+  
   Init_SSL_CTX(ctx);
 }
 
@@ -167,7 +169,19 @@ int sedp::Client::get_id(){
 void sedp::Client::compute_mask() {
   for (int i = 0; i < dataset_size; i++)
   {
-    mask.push_back(data[i] - triples[i][0]);
+    vector<Share> shares;
+    for (int j = 0; j< players.size(); j++) {
+      Share * s = new Share();
+      ShareData * SD = new ShareData();
+      SD->Initialize_Shamir(3, 1);
+      s->init_share_data(*SD);
+      vector<gfp> placeholder;
+      placeholder.push_back(triples[i][j][0]);
+      s->set_player_and_shares(j, placeholder);
+      shares.push_back(*s);
+    }
+    cout << " SHARES " << shares[0].a[0] << " " << shares[1].a[0] << " " << shares[2].a[0] << endl;
+    mask.push_back(data[i] - combine(shares));
   }
 }
 
@@ -194,6 +208,9 @@ void sedp::Client::get_random_tuples(int player_id) {
   lock_guard<mutex> g{mtx};
   cout << "Listening for shares of player " + to_string(player_id) + "..." << endl;
 
+  vector<vector<gfp>> tmp;
+  tmp.assign(players.size(), vector<gfp>(5));
+  triples.assign(dataset_size, tmp);
   for (int i = 0; i < dataset_size; i++) {
     string s;
     receive_from(players.at(player_id), s);
@@ -203,7 +220,9 @@ void sedp::Client::get_random_tuples(int player_id) {
 
     for (int j = 0; j < 5; j++)
     {
-      triples[i][j] += triple_shares[j];
+        //[player_id]
+        // cout << triples.size() << " " << triples[0].size() << " " << triples[0][0].size() << endl;
+        triples[i][player_id][j] = triple_shares[j];
     }
 
   }
@@ -215,20 +234,6 @@ void sedp::Client::get_random_tuples(int player_id) {
 void sedp::Client::verify_triples() {
   for (int i = 0; i < dataset_size; i++)
   {
-    if (triples[i][0] * triples[i][1] != triples[i][2])
-    {
-      cerr << "Incorrect triple at " << i << ", aborting\n";
-      cout << triples[i][0] * triples[i][1] << endl;
-      cout << triples[i][2] << endl;
-      // exit(1);
-    }
-    if (triples[i][1] * triples[i][3] != triples[i][4])
-    {
-      cerr << "Incorrect triple at " << i << ", aborting\n";
-      cout << triples[i][0] * triples[i][1] << endl;
-      cout << triples[i][2] << endl;
-      // exit(1);
-    }
   }
 }
 

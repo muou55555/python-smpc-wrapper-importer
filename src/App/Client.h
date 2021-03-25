@@ -41,7 +41,7 @@ namespace sedp {
     string dataset_file_path;
     int dataset_size;
     mutex mtx;
-    vector<vector<gfp>> triples;
+    vector<vector<vector<gfp>>> triples;
     vector<SSL *> players;
     vector<gfp> data, mask;
     vector <bigint> p;
