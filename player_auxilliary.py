@@ -12,12 +12,15 @@ cmd_compile_player = ['python', 'compile.py', 'Programs/aa']
 coordinator = "http://0.0.0.0:12314/api/result"
 
 ClientsRepo = {
-    "1": "http://0.0.0.0:9000"
+    "0": "http://0.0.0.0:9000",
+    "1": "http://0.0.0.0:9001",
+    "2": "http://0.0.0.0:9002"
 }
 
-def handle_output(line_output):
+def handle_output(line_output, client_list):
     if line_output == WAIT:
-        requests.get(ClientsRepo["1"] + "/api/trigger-importation")
+        for client in client_list:
+            requests.get(ClientsRepo[str(client)] + "/api/trigger-importation")
 
 def generate_code(replacement_line_1, replacement_line_2):
     f = open(MPC_PROGRAM)
@@ -28,8 +31,9 @@ def generate_code(replacement_line_1, replacement_line_2):
     t.write(remainder)
     t.close()
 
-def generate_and_compile(no_clients, dataset_size):
-    MPC_Fi_LINE = lambda x: 'no_clients = {0}'.format(no_clients)
+def generate_and_compile(clients, dataset_size):
+    no_clients = clients.split(".")
+    MPC_Fi_LINE = lambda x: 'no_clients = {0}'.format(len(no_clients))
     MPC_Se_LINE = lambda x: 'bins = {0}'.format(dataset_size)
     print("the commandline is {}".format(cmd_compile_player))
     generate_code(MPC_Fi_LINE(no_clients), MPC_Se_LINE(dataset_size))
@@ -38,8 +42,9 @@ def generate_and_compile(no_clients, dataset_size):
     except subprocess.CalledProcessError as e:
         print("There was an error")
 
-def run_smpc_computation(player_id, no_clients, jobId):
-    cmd_run_player = "./Player.x {0} Programs/aa -clients {1}".format(player_id, no_clients)
+def run_smpc_computation(player_id, clients, jobId):
+    client_list = clients.split(".")
+    cmd_run_player = "./Player.x {0} Programs/aa -clients {1}".format(player_id, len(client_list))
     cmdpipe = subprocess.Popen(cmd_run_player, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     computation_result = None
     print("the commandline is {}".format(cmd_run_player))
@@ -50,7 +55,7 @@ def run_smpc_computation(player_id, no_clients, jobId):
             break
         if out != '':
             line_output = out.split("\n")[0]
-            handle_output(line_output)
+            handle_output(line_output, client_list)
             if (line_output == OUTPUT_START):
                 computation_result = cmdpipe.stdout.readline().split("\n")[0]
             sys.stdout.write(out)

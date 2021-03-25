@@ -23,8 +23,8 @@ api = Api(app)
 class TriggerComputation(Resource):
     def get(self, jobId, clients, datasetSize):
         try:
-            generate_and_compile(clients, datasetSize)
-            p = Process(target=run_smpc_computation, args=(player_id, clients, jobId,))
+            generate_and_compile(str(clients), datasetSize)
+            p = Process(target=run_smpc_computation, args=(player_id, str(clients), jobId,))
             p.start()
             sleep(0.05)
             if p.exitcode == 0:
