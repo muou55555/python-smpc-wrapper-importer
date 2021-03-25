@@ -45,7 +45,9 @@ void sedp::Client::init() {
   cout << "Dataset size: " << dataset_size << endl;
 
   // Initialize shares matrix
-  
+  vector<vector<gfp>> tmp;
+  tmp.assign(3, vector<gfp>(5));
+  triples.assign(dataset_size, tmp);
   Init_SSL_CTX(ctx);
 }
 
@@ -177,10 +179,12 @@ void sedp::Client::compute_mask() {
       s->init_share_data(*SD);
       vector<gfp> placeholder;
       placeholder.push_back(triples[i][j][0]);
+      cout << " PUSHING BACK " << triples[i][j][0] << endl;
       s->set_player_and_shares(j, placeholder);
       shares.push_back(*s);
     }
     cout << " SHARES " << shares[0].a[0] << " " << shares[1].a[0] << " " << shares[2].a[0] << endl;
+    cout << "RECONSTRUCTION " << combine(shares) <<endl;
     mask.push_back(data[i] - combine(shares));
   }
 }
@@ -208,9 +212,6 @@ void sedp::Client::get_random_tuples(int player_id) {
   lock_guard<mutex> g{mtx};
   cout << "Listening for shares of player " + to_string(player_id) + "..." << endl;
 
-  vector<vector<gfp>> tmp;
-  tmp.assign(players.size(), vector<gfp>(5));
-  triples.assign(dataset_size, tmp);
   for (int i = 0; i < dataset_size; i++) {
     string s;
     receive_from(players.at(player_id), s);
@@ -218,11 +219,17 @@ void sedp::Client::get_random_tuples(int player_id) {
     vector<gfp> triple_shares;
     unpack(s, triple_shares);
 
+    cout << s << " THIS IS NEW for player " << player_id << endl;
+
     for (int j = 0; j < 5; j++)
     {
         //[player_id]
         // cout << triples.size() << " " << triples[0].size() << " " << triples[0][0].size() << endl;
+        
         triples[i][player_id][j] = triple_shares[j];
+        if (j==0) {
+          cout << " DID I WRITE ? " << triples[i][player_id][j] << endl;
+        }
     }
 
   }

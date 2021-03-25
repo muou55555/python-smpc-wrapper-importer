@@ -1,5 +1,5 @@
-no_clients = 2 # <% clients %>
-bins = 2 # <% bins %>
+no_clients = 1 # <% clients %>
+bins = 9 # <% bins %>
 
 data = sint.Matrix(bins,no_clients)
 r = sint.Array(1)
