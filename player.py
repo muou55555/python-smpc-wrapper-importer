@@ -1,35 +1,45 @@
-import os, sys
-import subprocess
+from time import sleep
+from flask import Flask, jsonify
+from flask_restful import Resource, Api
+from multiprocessing import Process
+from player_auxilliary import generate_and_compile, run_smpc_computation
+import json
+import argparse
 
-WAIT = '@'
-OUTPUT_START = '# OUTPUT START:'
-player_id = '1'
-no_clients = '1'
-cmd = ['./Player.x', player_id, 'Programs/aa', '-clients', no_clients]
-cmd = "./Player.x {0} Programs/aa -clients {1}".format(player_id, no_clients)
+parser = argparse.ArgumentParser(description='Process some integers.')
+parser.add_argument(
+    'player_id',
+    metavar='id',
+    type=int,
+    nargs=1,
+    help='Specify player Id'
+)
 
-def handle_output(line_output):
-    if line_output == WAIT:
-        print('trigger wait')
+args = parser.parse_args()
+player_id = args.player_id[0]
+app = Flask(__name__)
+api = Api(app)
 
+class TriggerComputation(Resource):
+    def get(self, jobId, clients, datasetSize):
+        try:
+            generate_and_compile(clients, datasetSize)
+            p = Process(target=run_smpc_computation, args=(player_id, clients, jobId,))
+            p.start()
+            sleep(0.05)
+            if p.exitcode == 0:
+                raise ValueError
+            return 200
+        except Exception as e:
+            print(e)
+            return 500
 
-def main():
-    cmdpipe = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    computation_result = None
-    print("the commandline is {}".format(cmd))
+class Ping(Resource):
+    def get(self):
+        return 200
+
+api.add_resource(Ping, '/api/ping')
+api.add_resource(TriggerComputation, '/api/job-id/<jobId>/clients/<clients>/dataset-size/<datasetSize>')
     
-    while True:
-        out = cmdpipe.stdout.readline()
-        if out == '' and cmdpipe.poll() != None:
-            break
-        if out != '':
-            line_output = out.split("\n")[0]
-            handle_output(line_output)
-            if (line_output == OUTPUT_START):
-                computation_result = cmdpipe.stdout.readline().split("\n")[0]
-            sys.stdout.write(out)
-            sys.stdout.flush()
-    print("The computation result is {0}".format(computation_result))
-
 if __name__ == '__main__':
-    main()
+    app.run(debug=True, port=7100+player_id)
