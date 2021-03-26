@@ -1,4 +1,4 @@
-no_clients = 1
+no_clients = 3
 bins = 9
 
 data = sint.Matrix(bins,no_clients)
@@ -13,7 +13,6 @@ def output_random_triples(cond):
     v, un1, un2 = sint.get_random_triple()
     u = v * r
     outp = [y, r, w, v, u]
-    print_ln("Exporting ... %s", y.reveal())
     output_shares(2, *outp)
     data[i][cond] = y
   return cond + 1
@@ -36,18 +35,30 @@ def import_data(cond):
   def range_body(i):
     # naming as in Damgard et al
     y = cint.public_input(1000)
-    print_ln("Imported... %s", y)
-    print_ln("Demasking... %s", y + data[i][cond].reveal())
-    r[0] = r[0] + y + data[i][cond]
+    data[i][cond] = y + data[i][cond]
   return cond + 1
 
 while_loop(import_data, lambda x: x < no_clients, 0)
 
-open_channel(500)
-cint.public_output(r[0].reveal())
+# open_channel(500)
+# cint.public_output(r[0].reveal())
 
 close_channel(4)
 close_channel(3)
 close_channel(2)
 close_channel(1)
 close_channel(0)
+
+histogram = sint.Array(bins)
+
+@for_range(bins)
+def range_body(i):
+  @for_range(no_clients)
+  def range_body2(j):
+    histogram[i] = histogram[i] + data[i][j]
+
+open_channel(500)
+@for_range(len(histogram))
+def range_body(i):
+  cint.public_output(histogram[i].reveal())
+close_channel(500)

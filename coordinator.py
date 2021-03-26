@@ -24,12 +24,10 @@ ClientsRepo = {
 
 class PreComputePoll(Resource):
     def get(self, job_id, clients):
-        s = 0
         client_list = clients.split(".")
         for i in client_list:
             r = requests.get(ClientsRepo[i] + "/api/get-dataset-size")
-            s += r.json()
-        dataset_size = s
+        dataset_size = str(r.json())
         for k in PlayersRepo:
             r = requests.get(PlayersRepo[k] + "/api/job-id/{0}/clients/{1}/dataset-size/{2}".format(str(job_id), str(clients), dataset_size))
             if r.json() != 200:
@@ -41,7 +39,10 @@ class Return(Resource):
         json_data = request.get_json(force=True)
         result = {}
         for k in json_data:
-            result[str(k)] = str(json_data[k])
+            if str(k) == "jobId":
+                result[str(k)] = str(json_data[k])
+            else:
+                result[str(k)] = [str(i) for i in json_data[k]]
         print(result)
         return 200
 

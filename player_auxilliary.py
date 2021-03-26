@@ -6,6 +6,7 @@ MPC_PROGRAM = "Programs/aa/aa.mpc"
 
 WAIT = '@'
 OUTPUT_START = '# OUTPUT START:'
+OUTPUT_END = "$ OUTPUT END"
 
 cmd_compile_player = ['python', 'compile.py', 'Programs/aa']
 
@@ -17,7 +18,9 @@ ClientsRepo = {
     "2": "http://0.0.0.0:9002"
 }
 
-def handle_output(line_output, client_list):
+def handle_output(player_id, line_output, client_list):
+    if player_id != 0:
+        return
     if line_output == WAIT:
         for client in client_list:
             requests.get(ClientsRepo[str(client)] + "/api/trigger-importation")
@@ -48,18 +51,24 @@ def run_smpc_computation(player_id, clients, jobId):
     cmdpipe = subprocess.Popen(cmd_run_player, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     computation_result = None
     print("the commandline is {}".format(cmd_run_player))
-    
+    switch = False
     while True:
         out = cmdpipe.stdout.readline()
         if out == '' and cmdpipe.poll() != None:
             break
         if out != '':
             line_output = out.split("\n")[0]
-            handle_output(line_output, client_list)
-            if (line_output == OUTPUT_START):
-                computation_result = cmdpipe.stdout.readline().split("\n")[0]
+            handle_output(player_id, line_output, client_list)
+            if (line_output == OUTPUT_END):
+                switch = False
+            if (switch):
+                computation_result += [str(out.split("\n")[0])]
+            if (line_output == OUTPUT_START and computation_result is None):
+                computation_result = []
+                switch = True
             sys.stdout.write(out)
             sys.stdout.flush()
+            
     print("The computation result is {0}".format(computation_result))
     if computation_result is None:
         exit(0)
