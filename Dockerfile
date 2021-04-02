@@ -5,6 +5,7 @@ RUN apt-get install -y \
   gnupg2 \
   yasm \
   python \
+  python-pip \
   gcc \
   g++ \
   cmake \
@@ -45,4 +46,8 @@ RUN echo 'OSSL = /local/openssl' >> CONFIG.mine
 WORKDIR /SCALE-MAMBA/src
 RUN make
 
-CMD ["bin/bash"]
+WORKDIR /SCALE-MAMBA
+RUN pip install -r requirements.txt
+
+
+ENTRYPOINT ["python", "coordinator.py"]
