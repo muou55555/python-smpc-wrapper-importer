@@ -13,6 +13,7 @@ services:
     image: gpikra/scalemamba:v1
     command: python coordinator.py        
     network_mode: host
+    working_dir: /SCALE-MAMBA
     volumes:
       - .:/SCALE-MAMBA
 
@@ -20,6 +21,7 @@ services:
     image: gpikra/scalemamba:v1
     entrypoint: python player.py
     network_mode: host
+    working_dir: /SCALE-MAMBA
     volumes:
       - .:/SCALE-MAMBA
   
@@ -27,5 +29,6 @@ services:
     image: gpikra/scalemamba:v1
     entrypoint: python client.py
     network_mode: host
+    working_dir: /SCALE-MAMBA
     volumes:
       - .:/SCALE-MAMBA
