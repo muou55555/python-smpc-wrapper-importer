@@ -47,4 +47,4 @@ api.add_resource(GetDatasetSize, '/api/get-dataset-size')
 api.add_resource(TriggerImportation, '/api/trigger-importation')
     
 if __name__ == '__main__':
-    app.run(debug=True, port=9000+client_id)
+    app.run(debug=True, port=9000+client_id, host="0.0.0.0")

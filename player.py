@@ -42,4 +42,4 @@ api.add_resource(Ping, '/api/ping')
 api.add_resource(TriggerComputation, '/api/job-id/<jobId>/clients/<clients>/dataset-size/<datasetSize>')
     
 if __name__ == '__main__':
-    app.run(debug=True, port=7100+player_id)
+    app.run(debug=True, port=7100+player_id, host="0.0.0.0")
