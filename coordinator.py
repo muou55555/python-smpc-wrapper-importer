@@ -11,15 +11,15 @@ app = Flask(__name__)
 api = Api(app)
 
 PlayersRepo = {
-    "2": "http://88.197.53.58:7102",
-    "1": "http://88.197.53.57:7101",
-    "0": "http://88.197.53.56:7100"
+    "2": "http://dl058.madgik.di.uoa.gr:7102",
+    "1": "http://dl057.madgik.di.uoa.gr:7101",
+    "0": "http://dl056.madgik.di.uoa.gr:7100"
 }
 
 ClientsRepo = {
-    "0": "http://88.197.53.56:9000",
-    "1": "http://88.197.53.57:9001",
-    "2": "http://88.197.53.58:9002"
+    "2": "http://dl058.madgik.di.uoa.gr:9002",
+    "1": "http://dl057.madgik.di.uoa.gr:9001",
+    "0": "http://dl056.madgik.di.uoa.gr:9000"
 }
 
 class PreComputePoll(Resource):
