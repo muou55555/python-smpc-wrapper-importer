@@ -26,7 +26,7 @@ class TriggerComputation(Resource):
             generate_and_compile(str(clients), datasetSize)
             p = Process(target=run_smpc_computation, args=(player_id, str(clients), jobId,))
             p.start()
-            sleep(0.05)
+            sleep(0.5)
             if p.exitcode == 0:
                 raise ValueError
             return 200
