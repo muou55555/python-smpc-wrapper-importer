@@ -19,7 +19,7 @@ services:
 
   player:
     image: gpikra/scalemamba:v1
-    entrypoint: python player.py
+    entrypoint: make progs && python player.py
     network_mode: host
     working_dir: /SCALE-MAMBA
     volumes:
@@ -27,7 +27,7 @@ services:
   
   client:
     image: gpikra/scalemamba:v1
-    entrypoint: python client.py
+    entrypoint: make progs && python client.py
     network_mode: host
     working_dir: /SCALE-MAMBA
     volumes:
