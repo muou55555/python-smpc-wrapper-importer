@@ -29,6 +29,7 @@ class PreComputePoll(Resource):
             r = requests.get(ClientsRepo[i] + "/api/get-dataset-size")
         dataset_size = str(r.json())
         for k in PlayersRepo:
+            print(PlayersRepo[k] + "/api/job-id/{0}/clients/{1}/dataset-size/{2}".format(str(job_id), str(clients), dataset_size))
             r = requests.get(PlayersRepo[k] + "/api/job-id/{0}/clients/{1}/dataset-size/{2}".format(str(job_id), str(clients), dataset_size))
             if r.json() != 200:
                 abort(500)
