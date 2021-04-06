@@ -6,6 +6,9 @@ services:
       context: .
       network: host
 
+  coordinator_bash:
+    image: gpikra/scalemamba:v1
+  
   coordinator:
     image: gpikra/scalemamba:v1
     command: python coordinator.py        

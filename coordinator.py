@@ -10,6 +10,18 @@ import json
 app = Flask(__name__)
 api = Api(app)
 
+# PlayersRepo = {
+#     "2": "http://localhost:7102",
+#     "1": "http://localhost:7101",
+#     "0": "http://localhost:7100"
+# }
+
+# ClientsRepo = {
+#     "2": "http://localhost:9002",
+#     "1": "http://localhost:9001",
+#     "0": "http://localhost:9000"
+# }
+
 PlayersRepo = {
     "2": "http://dl058.madgik.di.uoa.gr:7102",
     "1": "http://dl057.madgik.di.uoa.gr:7101",
