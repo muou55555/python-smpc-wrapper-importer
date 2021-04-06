@@ -50,4 +50,4 @@ WORKDIR /SCALE-MAMBA
 RUN pip install -r requirements.txt
 
 
-ENTRYPOINT ["python", "coordinator.py"]
+# ENTRYPOINT ["python", "coordinator.py"]

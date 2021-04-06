@@ -1,15 +1,22 @@
 version: '3.7'
 services:
-  SCALE:
-    container_name: SCALE
-    image: SCALE:latest
+  scale:
+    container_name: scale_mamba
     build:
-      context: ./
-    ports:
-      - ${PORT}:${PORT}
-    networks:
-      - SCALE
+      context: .
+      network: host
 
-networks:
-  SCALE:
-    name: SCALE
+  coordinator:
+    image: gpikra/scalemamba:v1
+    command: python coordinator.py        
+    network_mode: host
+
+  player:
+    image: gpikra/scalemamba:v1
+    entrypoint: python player.py
+    network_mode: host
+  
+  client:
+    image: gpikra/scalemamba:v1
+    entrypoint: python client.py
+    network_mode: host
