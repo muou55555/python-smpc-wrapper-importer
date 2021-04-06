@@ -14,21 +14,17 @@ services:
     command: python coordinator.py        
     network_mode: host
     working_dir: /SCALE-MAMBA
-    volumes:
-      - .:/SCALE-MAMBA
+    # volumes:
+    #   - .:/SCALE-MAMBA
 
   player:
     image: gpikra/scalemamba:v1
-    entrypoint: make progs && python player.py
+    entrypoint: python player.py
     network_mode: host
     working_dir: /SCALE-MAMBA
-    volumes:
-      - .:/SCALE-MAMBA
   
   client:
     image: gpikra/scalemamba:v1
-    entrypoint: make progs && python client.py
+    entrypoint: python client.py
     network_mode: host
     working_dir: /SCALE-MAMBA
-    volumes:
-      - .:/SCALE-MAMBA
