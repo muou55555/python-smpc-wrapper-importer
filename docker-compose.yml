@@ -22,7 +22,9 @@ services:
     entrypoint: python player.py
     network_mode: host
     working_dir: /SCALE-MAMBA
-  
+    volumes:
+      - ./player.py:/SCALE-MAMBA/player.py
+
   client:
     image: gpikra/scalemamba:v1
     entrypoint: python client.py
