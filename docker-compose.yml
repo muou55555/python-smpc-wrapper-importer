@@ -1,13 +1,13 @@
 version: '3.7'
 services:
-  scale:
-    container_name: scale_mamba
-    build:
-      context: .
-      network: host
+  # scale:
+  #   container_name: scale_mamba
+  #   build:
+  #     context: .
+  #     network: host
 
-  coordinator_bash:
-    image: gpikra/scalemamba:v1
+  # coordinator_bash:
+  #   image: gpikra/scalemamba:v1
   
   coordinator:
     image: gpikra/scalemamba:v1
