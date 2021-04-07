@@ -3,13 +3,15 @@ import subprocess
 from time import sleep
 from flask import Flask, jsonify, request
 from flask_restful import Resource, Api, abort
-from multiprocessing import Process
+from multiprocessing import Process, Value, Manager
 import requests
 import json
+from ctypes import c_char_p
 
 app = Flask(__name__)
 api = Api(app)
-
+manager = Manager()
+return_url = Value(c_char_p, "")
 # PlayersRepo = {
 #     "2": "http://localhost:7102",
 #     "1": "http://localhost:7101",
@@ -56,6 +58,16 @@ class PreComputePoll(Resource):
 
         return 200
 
+class SetReturnUrl(Resource):
+    def get(self):
+        return return_url.value
+        
+    def post(self):
+        json_data = request.get_json(force=True)
+        return_url.value = json_data['url']
+        print(return_url.value)
+        return 200
+
 class Return(Resource):
     def post(self):
         json_data = request.get_json(force=True)
@@ -66,10 +78,19 @@ class Return(Resource):
             else:
                 result[str(k)] = [str(i) for i in json_data[k]]
         print(result)
+        print(return_url.value)
+        if (return_url.value != ""):
+            requests.post(
+                return_url.value,
+                json={
+                    "jobId": jobId,
+                    "computation_output": computation_result
+                }
+            )
         return 200
 
 api.add_resource(PreComputePoll, '/api/secure-aggregation/job-id/<job_id>/clients/<clients>')
-api.add_resource(Return, '/api/result')
+api.add_resource(SetReturnUrl, '/api/set-return-url')
 
 
 if __name__ == '__main__':
