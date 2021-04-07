@@ -28,3 +28,6 @@ services:
     entrypoint: python client.py
     network_mode: host
     working_dir: /SCALE-MAMBA
+    volumes:
+      - ./dataset:/SCALE-MAMBA/dataset
+      - ./client.py:/SCALE-MAMBA/client.py

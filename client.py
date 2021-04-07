@@ -1,5 +1,5 @@
 from time import sleep
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_restful import Resource, Api
 from multiprocessing import Process
 import subprocess
@@ -38,6 +38,14 @@ class GetDatasetSize(Resource):
             print(e)
             return 500
 
+class ChangeData(Resource):
+    def post(self):
+        json_data = request.get_json(force=True)
+        result = {}
+        with open(dataset, 'w') as f:
+            f.writelines([str(j) + '\n' for j in json_data['data']])
+        return 200
+
 class Ping(Resource):
     def get(self):
         return 200
@@ -45,6 +53,7 @@ class Ping(Resource):
 api.add_resource(Ping, '/api/ping')
 api.add_resource(GetDatasetSize, '/api/get-dataset-size')
 api.add_resource(TriggerImportation, '/api/trigger-importation')
-    
+api.add_resource(ChangeData, '/api/update-dataset')
+
 if __name__ == '__main__':
     app.run(debug=True, port=9000+client_id, host="0.0.0.0")
