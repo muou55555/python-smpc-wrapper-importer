@@ -12,6 +12,7 @@ app = Flask(__name__)
 api = Api(app)
 manager = Manager()
 return_url = Value(c_char_p, "")
+
 # PlayersRepo = {
 #     "2": "http://localhost:7102",
 #     "1": "http://localhost:7101",
@@ -43,17 +44,10 @@ class PreComputePoll(Resource):
             r = requests.get(ClientsRepo[i] + "/api/get-dataset-size")
         dataset_size = str(r.json())
         for k in ['2', '1', '0']:
-            print(k)
-            print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-            print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-            print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
             r = requests.get(PlayersRepo[k] + "/api/job-id/{0}/clients/{1}/dataset-size/{2}".format(str(job_id), str(clients), dataset_size))           
             if r.json() != 200:
                 print(r.json())
                 print(PlayersRepo[k] + "/api/job-id/{0}/clients/{1}/dataset-size/{2}".format(str(job_id), str(clients), dataset_size))
-                print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-                print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-                print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
                 abort(500)
         return 200
 

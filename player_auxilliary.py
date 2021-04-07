@@ -76,8 +76,8 @@ def run_smpc_computation(player_id, clients, jobId):
             if (line_output == OUTPUT_START and computation_result is None):
                 computation_result = []
                 switch = True
-            sys.stdout.write(out)
-            sys.stdout.flush()
+            # sys.stdout.write(out)
+            # sys.stdout.flush()
             
     print("The computation result is {0}".format(computation_result))
     if computation_result is None:

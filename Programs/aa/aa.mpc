@@ -1,5 +1,5 @@
 no_clients = 1
-bins = 9
+bins = 7
 
 data = sint.Matrix(bins,no_clients)
 r = sint.Array(1)
