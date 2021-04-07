@@ -55,13 +55,12 @@ class PreComputePoll(Resource):
                 print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
                 print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
                 abort(500)
-
         return 200
 
 class SetReturnUrl(Resource):
     def get(self):
         return return_url.value
-        
+
     def post(self):
         json_data = request.get_json(force=True)
         return_url.value = json_data['url']

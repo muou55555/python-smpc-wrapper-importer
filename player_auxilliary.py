@@ -63,7 +63,7 @@ def run_smpc_computation(player_id, clients, jobId):
     while True:
         out = cmdpipe.stdout.readline()
         print(out)
-        print(cmdpipe.stderr.readline())
+        # print(cmdpipe.stderr.readline())
         if out == '' and cmdpipe.poll() != None:
             break
         if out != '':
