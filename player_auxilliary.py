@@ -10,8 +10,8 @@ OUTPUT_END = "$ OUTPUT END"
 
 cmd_compile_player = ['python', 'compile.py', 'Programs/aa']
 
-# coordinator = "http://0.0.0.0:12314/api/result"
-coordinator = "http://dl056.madgik.di.uoa.gr:12314/api/result"
+coordinator = "http://0.0.0.0:12314/api/result"
+# coordinator = "http://dl056.madgik.di.uoa.gr:12314/api/result"
 
 # ClientsRepo = {
 #     "0": "http://0.0.0.0:9000",
@@ -62,8 +62,7 @@ def run_smpc_computation(player_id, clients, jobId):
     switch = False
     while True:
         out = cmdpipe.stdout.readline()
-        print(out)
-        # print(cmdpipe.stderr.readline())
+        # print(out)
         if out == '' and cmdpipe.poll() != None:
             break
         if out != '':
