@@ -1,10 +1,10 @@
 version: '3.7'
 services:
-  # scale:
-  #   container_name: scale_mamba
-  #   build:
-  #     context: .
-  #     network: host
+  scale:
+    container_name: scale_mamba
+    build:
+      context: .
+      network: host
 
   # coordinator_bash:
   #   image: gpikra/scalemamba:v1
@@ -23,7 +23,7 @@ services:
     network_mode: host
     working_dir: /SCALE-MAMBA
     volumes:
-      - ./player.py:/SCALE-MAMBA/player.py
+      - ./player_auxilliary.py:/SCALE-MAMBA/player_auxilliary.py
 
   client:
     image: gpikra/scalemamba:v1

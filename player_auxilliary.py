@@ -10,8 +10,8 @@ OUTPUT_END = "$ OUTPUT END"
 
 cmd_compile_player = ['python', 'compile.py', 'Programs/aa']
 
-coordinator = "http://0.0.0.0:12314/api/result"
-# coordinator = "http://dl056.madgik.di.uoa.gr:12314/api/result"
+# coordinator = "http://0.0.0.0:12314/api/result"
+coordinator = "http://dl056.madgik.di.uoa.gr:12314/api/result"
 
 # ClientsRepo = {
 #     "0": "http://0.0.0.0:9000",
@@ -59,15 +59,6 @@ def run_smpc_computation(player_id, clients, jobId):
     cmdpipe = subprocess.Popen(cmd_run_player, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     computation_result = None
     print("the commandline is {}".format(cmd_run_player))
-    print("UPDATED FILE")
-    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     switch = False
     while True:
         out = cmdpipe.stdout.readline()
