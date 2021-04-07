@@ -40,15 +40,20 @@ class PreComputePoll(Resource):
         for i in client_list:
             r = requests.get(ClientsRepo[i] + "/api/get-dataset-size")
         dataset_size = str(r.json())
-        for k in PlayersRepo:
-            print(PlayersRepo[k] + "/api/job-id/{0}/clients/{1}/dataset-size/{2}".format(str(job_id), str(clients), dataset_size))
-            print("=========================================================")
-            print("=========================================================")
-            print("=========================================================")
-            print("=========================================================")
-            r = requests.get(PlayersRepo[k] + "/api/job-id/{0}/clients/{1}/dataset-size/{2}".format(str(job_id), str(clients), dataset_size))
+        for k in ['2', '1', '0']:
+            print(k)
+            print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+            print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+            print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+            r = requests.get(PlayersRepo[k] + "/api/job-id/{0}/clients/{1}/dataset-size/{2}".format(str(job_id), str(clients), dataset_size))           
             if r.json() != 200:
+                print(r.json())
+                print(PlayersRepo[k] + "/api/job-id/{0}/clients/{1}/dataset-size/{2}".format(str(job_id), str(clients), dataset_size))
+                print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+                print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+                print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
                 abort(500)
+
         return 200
 
 class Return(Resource):

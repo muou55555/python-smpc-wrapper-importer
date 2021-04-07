@@ -20,7 +20,7 @@ client_id = args.client_id[0]
 app = Flask(__name__)
 api = Api(app)
 
-dataset = "dataset.txt"
+dataset = "dataset/dataset.txt"
 
 class TriggerImportation(Resource):
     def get (self):
