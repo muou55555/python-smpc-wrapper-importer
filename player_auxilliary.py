@@ -10,20 +10,20 @@ OUTPUT_END = "$ OUTPUT END"
 
 cmd_compile_player = ['python', 'compile.py', 'Programs/aa']
 
-# coordinator = "http://0.0.0.0:12314/api/result"
-coordinator = "http://dl056.madgik.di.uoa.gr:12314/api/result"
-
-# ClientsRepo = {
-#     "0": "http://0.0.0.0:9000",
-#     "1": "http://0.0.0.0:9001",
-#     "2": "http://0.0.0.0:9002"
-# }
+coordinator = "http://0.0.0.0:12314/api/result"
+# coordinator = "http://dl056.madgik.di.uoa.gr:12314/api/result"
 
 ClientsRepo = {
-    "2": "http://dl058.madgik.di.uoa.gr:9002",
-    "1": "http://dl057.madgik.di.uoa.gr:9001",
-    "0": "http://dl056.madgik.di.uoa.gr:9000"
+    "0": "http://0.0.0.0:9000",
+    "1": "http://0.0.0.0:9001",
+    "2": "http://0.0.0.0:9002"
 }
+
+# ClientsRepo = {
+#     "2": "http://dl058.madgik.di.uoa.gr:9002",
+#     "1": "http://dl057.madgik.di.uoa.gr:9001",
+#     "0": "http://dl056.madgik.di.uoa.gr:9000"
+# }
 
 
 def handle_output(player_id, line_output, client_list):
@@ -62,7 +62,7 @@ def run_smpc_computation(player_id, clients, jobId):
     switch = False
     while True:
         out = cmdpipe.stdout.readline()
-        # print(out)
+        print(out)
         if out == '' and cmdpipe.poll() != None:
             break
         if out != '':

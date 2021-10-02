@@ -39,6 +39,11 @@ class GetDatasetSize(Resource):
             return 500
 
 class ChangeData(Resource):
+    def get(self):
+        with open(dataset, 'r') as f:
+            ret = [i.split("\n")[0] for i in f.readlines()]
+            return jsonify(ret)
+
     def post(self):
         json_data = request.get_json(force=True)
         result = {}

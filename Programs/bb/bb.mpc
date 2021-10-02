@@ -1,0 +1,21 @@
+no_clients = 2
+bins = 2510
+
+data = sint.Matrix(bins,no_clients)
+r = sint.Array(1)
+r[0] = sint(0)
+
+def output_random_triples(cond):
+  @for_range(bins)
+  def range_body(i):
+    # naming as in Damgard et al
+    y, r, w = sint.get_random_triple()
+    v, un1, un2 = sint.get_random_triple()
+    u = v * r
+    outp = [y, r, w, v, u]
+    output_shares(2, *outp)
+    print_ln("%s", w.reveal())
+    data[i][cond] = y
+  return cond + 1
+
+while_loop(output_random_triples, lambda x: x < no_clients, 0)
