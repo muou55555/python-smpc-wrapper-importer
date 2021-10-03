@@ -1,5 +1,6 @@
 from time import sleep
 from flask import Flask, jsonify
+from flask_cors.extension import CORS
 from flask_restful import Resource, Api
 from multiprocessing import Process
 from player_auxilliary import generate_and_compile, run_smpc_computation
@@ -20,6 +21,7 @@ player_id = args.player_id[0]
 app = Flask(__name__)
 api = Api(app)
 
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 class TriggerComputation(Resource):
     def get(self, jobId, clients, datasetSize):
         try:

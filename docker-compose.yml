@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 services:
   scale:
     container_name: scale_mamba
@@ -8,14 +8,14 @@ services:
 
   # coordinator_bash:
   #   image: gpikra/scalemamba:v1
-  
-  coordinator:
-    image: gpikra/scalemamba:v1
-    command: python coordinator.py        
-    network_mode: host
-    working_dir: /SCALE-MAMBA
-    # volumes:
-    #   - .:/SCALE-MAMBA
+
+  # coordinator:
+  #   image: gpikra/scalemamba:v1
+  #   command: python coordinator.py
+  #   network_mode: host
+  #   working_dir: /SCALE-MAMBA
+  #   # volumes:
+  #   #   - .:/SCALE-MAMBA
 
   player:
     image: gpikra/scalemamba:v1
@@ -25,11 +25,11 @@ services:
     volumes:
       - ./player_auxilliary.py:/SCALE-MAMBA/player_auxilliary.py
 
-  client:
-    image: gpikra/scalemamba:v1
-    entrypoint: python client.py
-    network_mode: host
-    working_dir: /SCALE-MAMBA
-    volumes:
-      - ./dataset:/SCALE-MAMBA/dataset
-      - ./client.py:/SCALE-MAMBA/client.py
+  # client:
+  #   image: gpikra/scalemamba:v1
+  #   entrypoint: python client.py
+  #   network_mode: host
+  #   working_dir: /SCALE-MAMBA
+  #   volumes:
+  #     - ./dataset:/SCALE-MAMBA/dataset
+  #     - ./client.py:/SCALE-MAMBA/client.py
