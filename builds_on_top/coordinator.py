@@ -30,13 +30,13 @@ return_url = Value(c_char_p, b"")
 # }
 
 PlayersRepo = {
-    "2": "http://dl058.madgik.di.uoa.gr:7102",
+    "2": "http://dl057.madgik.di.uoa.gr:7102",
     "1": "http://dl057.madgik.di.uoa.gr:7101",
     "0": "http://dl056.madgik.di.uoa.gr:7100"
 }
 
 ClientsRepo = {
-    "2": "http://dl058.madgik.di.uoa.gr:9002",
+    "2": "http://dl057.madgik.di.uoa.gr:9002",
     "1": "http://dl057.madgik.di.uoa.gr:9001",
     "0": "http://dl056.madgik.di.uoa.gr:9000"
 }

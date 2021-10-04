@@ -22,7 +22,7 @@ coordinator = "http://dl056.madgik.di.uoa.gr:12314/api/result"
 # }
 
 ClientsRepo = {
-    "2": "http://dl058.madgik.di.uoa.gr:9002",
+    "2": "http://dl057.madgik.di.uoa.gr:9002",
     "1": "http://dl057.madgik.di.uoa.gr:9001",
     "0": "http://dl056.madgik.di.uoa.gr:9000"
 }
