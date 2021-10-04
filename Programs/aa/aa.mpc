@@ -1,4 +1,4 @@
-no_clients = 3
+no_clients = 1
 bins = 6
 
 data = sint.Matrix(bins,no_clients)

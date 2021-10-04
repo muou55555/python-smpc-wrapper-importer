@@ -30,19 +30,34 @@ params = [
     0
 ]
 
-offset = 2
-no_patients = 100
+offset = 1
+no_patients = 200
 
 
 def main():
     dataset = [{"pk": offset * no_patients + i}
                for i in range(no_patients)]
-    for datum in dataset:
+    npArray = np.zeros((no_patients, 4))
+    npArrayY = np.zeros((no_patients,))
+    for outterIdx, datum in enumerate(dataset):
         schema = {}
         for idx, k in enumerate(keys):
             schema[k] = dists[idx](params[idx])
+        npArray[outterIdx] = np.array(
+            [   
+                schema["heartRate"],
+                schema["nipb"],
+                schema["respiratoryRate"],
+                schema["o2saturation"]
+            ]
+        )
+        npArrayY[outterIdx] = schema["gender"]
         datum["data"] = schema
-    with open(os.path.join("dataset", f"full_dataset_{offset}.json"), 'w') as f:
+    with open(os.path.join('dataset', "numpy_dataset_{0}.npy".format(offset)), 'wb') as f:
+        np.save(f, npArray)
+    with open(os.path.join('dataset', "numpy_labels_{0}.npy".format(offset)), 'wb') as f:
+        np.save(f, npArrayY)
+    with open(os.path.join("dataset", "full_dataset_{0}.json".format(offset)), 'w') as f:
         json.dump(dataset, f)
 
 

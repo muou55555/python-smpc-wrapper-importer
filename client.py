@@ -8,6 +8,7 @@ import json
 import argparse
 import numpy as np
 import os
+from logistic_regressor import model_optimize
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument(
@@ -33,6 +34,7 @@ def job_dataset(x): return "dataset/dataset_{1}_{0}.txt".format(x, client_id)
 class TriggerImportation(Resource):
     def get(self, jobId):
         print("importation triggered")
+        print(job_dataset(jobId))
         cmd_run_clients = "./Client-Api.x {0} {1}".format(
             client_id, job_dataset(jobId))
         cmdpipe = subprocess.Popen(
@@ -42,13 +44,13 @@ class TriggerImportation(Resource):
             out = cmdpipe.stdout.readline().decode()
             if out == "":
                 break
-            # print(out)
+            print(out)
 
 
 class GetDatasetSize(Resource):
-    def get(self):
+    def get(self, jobId):
         try:
-            with open(dataset, 'r') as f:
+            with open(job_dataset(jobId), 'r') as f:
                 lines = f.readlines()
             return len(lines)
         except Exception as e:
@@ -104,6 +106,22 @@ class ComputeNumericalHistogram(Resource):
                 f.writelines([str(int(j)) + '\n' for j in list(histo)])
         return 200
 
+class LogisticRegressionTrigger(Resource):
+    def post(self, jobId):
+        json_data = request.get_json(force=True)
+        w = json_data["w"]
+        b = json_data["b"]
+        with open(os.path.join("dataset", "numpy_dataset_{0}.npy".format(client_id)), 'rb') as f: 
+            X = np.load(f)
+        with open(os.path.join("dataset", "numpy_labels_{0}.npy".format(client_id)), 'rb') as f: 
+            y = np.load(f)
+        grads, cost = model_optimize(w, b, X, y)
+        tmpResult = []
+        tmpResult += list(grads['dw'])
+        tmpResult += [grads['db'], cost]
+        with open(job_dataset(jobId), 'w') as f:
+                f.writelines([str(int(j * 1e5)) + '\n' for j in list(tmpResult)])
+        return 200
 class GetRawDataset(Resource):
     def get(self):
         with open(os.path.join("dataset", "full_dataset_{0}.json".format(client_id)), 'r') as f:
@@ -119,10 +137,11 @@ api.add_resource(ComputeNumericalHistogram,
                  '/api/compute-numerical-histogram/attribute/<attribute>/bins/<bins>/start/<start>/end/<end>/jobId/<jobId>')
 api.add_resource(ComputeCategoricalHistogram,
                  '/api/compute-histogram/attribute/<attribute>/values/<noValues>/jobId/<jobId>')
-api.add_resource(GetDatasetSize, '/api/get-dataset-size')
+api.add_resource(GetDatasetSize, '/api/get-dataset-size/job-id/<jobId>')
 api.add_resource(TriggerImportation, '/api/trigger-importation/job-id/<jobId>')
 api.add_resource(GetRawDataset, '/api/get-raw-dataset')
 api.add_resource(ChangeData, '/api/update-dataset')
+api.add_resource(LogisticRegressionTrigger, '/api/logistic-regression/job-id/<jobId>')
 
 if __name__ == '__main__':
     app.run(debug=True, port=9000+client_id, host="0.0.0.0")

@@ -1,21 +1,21 @@
 version: "3.7"
 services:
-  scale:
-    container_name: scale_mamba
-    build:
-      context: .
-      network: host
+  # scale:
+  #   container_name: scale_mamba
+  #   build:
+  #     context: .
+  #     network: host
 
   # coordinator_bash:
   #   image: gpikra/scalemamba:v1
 
-  # coordinator:
-  #   image: gpikra/scalemamba:v1
-  #   command: python coordinator.py
-  #   network_mode: host
-  #   working_dir: /SCALE-MAMBA
-  #   # volumes:
-  #   #   - .:/SCALE-MAMBA
+  coordinator:
+    image: gpikra/scalemamba:v1
+    command: python coordinator.py
+    network_mode: host
+    working_dir: /SCALE-MAMBA
+    # volumes:
+    #   - .:/SCALE-MAMBA
 
   player:
     image: gpikra/scalemamba:v1
@@ -25,11 +25,23 @@ services:
     volumes:
       - ./player_auxilliary.py:/SCALE-MAMBA/player_auxilliary.py
 
-  # client:
-  #   image: gpikra/scalemamba:v1
-  #   entrypoint: python client.py
-  #   network_mode: host
-  #   working_dir: /SCALE-MAMBA
-  #   volumes:
-  #     - ./dataset:/SCALE-MAMBA/dataset
-  #     - ./client.py:/SCALE-MAMBA/client.py
+  client:
+    image: gpikra/scalemamba:v1
+    entrypoint: python client.py
+    network_mode: host
+    working_dir: /SCALE-MAMBA
+    build:
+      context: ./builds_on_top/
+      network: host
+    volumes:
+      - ./dataset:/SCALE-MAMBA/dataset
+      - ./client.py:/SCALE-MAMBA/client.py
+
+  mockResearcher:
+    image: gpikra/scalemamba:v1
+    entrypoint: python mock_researcher.py
+    network_mode: host
+    working_dir: /SCALE-MAMBA
+    volumes:
+      - ./dataset:/SCALE-MAMBA/dataset
+      - ./mock_researcher.py:/SCALE-MAMBA/mock_researcher.py
