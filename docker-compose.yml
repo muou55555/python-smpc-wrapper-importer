@@ -14,8 +14,8 @@ services:
     command: python coordinator.py
     network_mode: host
     working_dir: /SCALE-MAMBA
-    # volumes:
-    #   - .:/SCALE-MAMBA
+    volumes:
+      - ./returns:/SCALE-MAMBA/returns
 
   player:
     image: gpikra/scalemamba:v1
@@ -23,6 +23,7 @@ services:
     network_mode: host
     working_dir: /SCALE-MAMBA
     volumes:
+      - ./returns:/SCALE-MAMBA/returns
       - ./player_auxilliary.py:/SCALE-MAMBA/player_auxilliary.py
 
   client:
@@ -34,6 +35,7 @@ services:
       context: ./builds_on_top/
       network: host
     volumes:
+      - ./returns:/SCALE-MAMBA/returns
       - ./dataset:/SCALE-MAMBA/dataset
       - ./client.py:/SCALE-MAMBA/client.py
 
@@ -43,5 +45,6 @@ services:
     network_mode: host
     working_dir: /SCALE-MAMBA
     volumes:
+      - ./returns:/SCALE-MAMBA/returns
       - ./dataset:/SCALE-MAMBA/dataset
       - ./mock_researcher.py:/SCALE-MAMBA/mock_researcher.py
