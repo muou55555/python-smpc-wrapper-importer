@@ -8,4 +8,5 @@ COPY ./player_auxilliary.py /SCALE-MAMBA/player_auxilliary.py
 COPY ./client.py /SCALE-MAMBA/client.py
 COPY ./mock_researcher.py /SCALE-MAMBA/mock_researcher.py
 COPY ./requirements.txt /SCALE-MAMBA/requirements.txt
+COPY ./NetworkData.txt /SCALE-MAMBA/Data/NetworkData.txt
 RUN pip install -r requirements.txt
